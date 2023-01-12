@@ -1,0 +1,36 @@
+﻿@model NewModelxViewModel
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Create New Model</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <form method="post">
+            <div class="mb-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+                <label asp-for="Name" class="form-label">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+
+                <label asp-for="Details" class="form-label">Details</label>
+                <input asp-for="Details" class="form-control" />
+                <span asp-validation-for="Details" class="text-danger small"></span>
+
+                <label asp-for="BrandId" class="form-label">Brand</label>
+                <select asp-for="BrandId" class="form-select" asp-items="@Model.Brands">
+                    <option value="">Seçiniz</option>
+                </select>
+                <span asp-validation-for="BrandId" class="text-danger small"></span>
+
+             
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success mb-2">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿@model DeleteCustomerViewModel
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Delete Customer Information</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <form method="post">
+            <div> Name : @Model.customer.IdNumber</div>
+            <div> Name : @Model.customer.Name</div>
+            <div> Surname : @Model.customer.Surname</div>
+            <div> Birthady : @Model.customer.Birthday</div>
+            <div> Phone Number : @Model.customer.PhoneNumber</div>
+            <div> E-mail : @Model.customer.Email</div>
+
+
+            <button class="btn btn-danger mb-3" type="submit">Delete</button>
+        </form>
+
+    </div>
+</div>

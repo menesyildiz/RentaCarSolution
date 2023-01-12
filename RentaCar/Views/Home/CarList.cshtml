@@ -1,0 +1,118 @@
+﻿@using RentaCar.Entities;
+@model List<Car>
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Car List</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-2">
+        <a asp-action="Create" class="btn btn-primary">New Car</a>
+    </div>
+    <div class="offset-2 col-1 pt-2">
+        <span>Filtre : </span>
+    </div>
+    <div class=" col-3">
+        <form method="post" id="frmFilter">
+            
+            <select name="filter" class="form-select" onchange="document.getElementById('frmFilter').submit()">
+                <option value="">Seçiniz</option>
+                <option value="Rented">Kiralanan</option>
+                <option value="NonRented">Kiralanmayan</option>
+                <option value="GearBoxAuto">Vites Kutusu (Automatic)</option>
+                <option value="GearBoxManu">Vites Kutusu (Manuel)</option>
+               
+            </select>
+        </form>
+    </div>
+    <div class="col-1 pt-2">
+        <span>Sırala : </span>
+    </div>
+    <div class=" col-3">
+        <form method="post" id="frmOrder">
+            <select name="order" class="form-select" onchange="document.getElementById('frmOrder').submit()">
+                <option value="">Seçiniz</option>
+                <option value="IP">Artan Fiyat</option>
+                <option value="DP">Azalan Fiyat</option>
+                <option value="ASC">A-Z'ye Markalar</option>
+                <option value="DESC">Z-A'ya Markalar</option>
+            </select>
+        </form>
+    </div>
+    @*<div class="col-1 text-end">
+        <button form="frmOrder" type="submit" class="btn btn-warning ">apply</button>
+
+    </div>*@
+
+</div>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-bordered ">
+            <tr>
+                <td>Id</td>
+                <td>Brand</td>
+                <td>Model</td>
+                <td>Year</td>
+                <td>Gear Box</td>
+                <td>Fuel</td>
+                <td>Color</td>
+                <td>Price</td>
+                <td>Rented</td>
+                <td>Rent Date</td>
+                <td>Delivery Date</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            @foreach (Car car in Model)
+            {
+                <tr>
+                    <td>@car.Id</td>
+                    <td>@car.Brand</td>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.GearBox</td>
+                    <td>@car.Fuel</td>
+                    <td>@car.Color</td>
+                    <td>@car.Price</td>
+                    <td>
+                        @if (car.Rented == false)
+                        {
+                            <div>No</div>
+                        }
+                        else
+                        {
+                            <div>Yes</div>
+                        }
+
+
+                    </td>
+                    <td>@car.RentDate</td>
+                    <td>@car.DeliveryDate</td>
+                    <td>
+                        @if (car.Rented == false)
+                        {
+                            <a asp-action="Rent" asp-route-carId="@car.Id" class="btn btn-info btn-sm">Rent</a>
+
+                        }
+                        else
+                        {
+                            <a asp-action="Receive" asp-route-carId="@car.Id" class="btn btn-success btn-sm">Receive</a>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-carId="@car.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-carId="@car.Id" class="btn btn-warning btn-sm">Edit</a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

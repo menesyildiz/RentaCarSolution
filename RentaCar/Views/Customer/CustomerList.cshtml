@@ -1,0 +1,53 @@
+﻿@using RentaCar.Entities;
+@model List<Customer>
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Customer List</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 mb-3">
+        <a asp-action="CreateCustomer" class="btn btn-primary">New Customer</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col mb-3">
+        <table class="table table-bordered ">
+            <tr>
+                <td>Id</td>
+                <td>IdNumber</td>
+                <td>Name</td>
+                <td>Surname</td>
+                <td>Birthday</td>
+                <td>Phone Number</td>
+                <td>E-Mail</td>
+                <td></td>
+                <td></td>
+
+            </tr>
+
+            @foreach (Customer customer in Model)
+            {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.IdNumber</td>
+                    <td>@customer.Name</td>
+                    <td>@customer.Surname</td>
+                    <td>@customer.Birthday</td>
+                    <td>@customer.PhoneNumber</td>
+                    <td>@customer.Email</td>
+                    <td>
+                        <a asp-action="EditCustomer" asp-route-customerId="@customer.Id" class="btn btn-warning btn-sm">Edit</a>
+                    </td>
+                    <td>
+                        <a asp-action="DeleteCustomer" asp-route-customerId="@customer.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

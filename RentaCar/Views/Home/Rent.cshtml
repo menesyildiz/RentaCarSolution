@@ -1,0 +1,33 @@
+﻿@model RentViewModel
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Rent Car</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div> brand: @Model.Car.Brand </div>
+        <div> Model: @Model.Car.Model </div>
+        <div> Year: @Model.Car.Year </div>
+        <div> GearBox: @Model.Car.GearBox </div>
+        <div> Fuel: @Model.Car.Fuel </div>
+        <div> Color: @Model.Car.Color </div>
+        <div> Price: @Model.Car.Price </div>
+
+        <div>   
+            <form method="post">  
+                <label asp-for="DeliveryDate" class="form-label">Delivery Date</label>
+                <input asp-for="DeliveryDate" class="form-control" />
+
+                <button class="btn btn-success" type="submit">Rent</button>
+            </form>
+        </div>
+    </div>
+
+    <div>   
+
+    </div>
+</div>

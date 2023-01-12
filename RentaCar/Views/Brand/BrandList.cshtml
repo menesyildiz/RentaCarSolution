@@ -1,0 +1,47 @@
+﻿@using RentaCar.Entities;
+@model List<Brand>
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Brand List</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 mb-3">
+        <a asp-action="CreateBrand" class="btn btn-primary">New Brand</a>
+    </div>
+</div>
+
+<div class="row" >
+    <div class="col mb-3">
+        <table class="table table-bordered ">
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Age Limit</td>
+                <td>Description</td>
+                <td></td>
+                <td></td>
+                
+            </tr>
+
+            @foreach (Brand brand in Model)
+            {
+                <tr>
+                    <td>@brand.Id</td>
+                    <td>@brand.Name</td>
+                    <td>@brand.AgeLimit</td>
+                    <td>@brand.Description</td>
+                    <td>
+                        <a asp-action="EditBrand" asp-route-brandId="@brand.Id" class="btn btn-warning btn-sm">Edit</a>
+                    </td>
+                    <td>
+                        <a asp-action="DeleteBrand" asp-route-brandId="@brand.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

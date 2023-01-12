@@ -1,0 +1,39 @@
+﻿@using RentaCar.Entities;
+@model Car
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Receive Car</h1>
+        <hr />
+    </div>
+</div>
+
+@{
+    decimal total = 0;
+    int rentdays = Model.DeliveryDate.Value.Subtract(Model.RentDate.Value).Days;
+    total = (Model.Price * rentdays)*1.18m;
+}
+
+<div class="row">
+    <div class="col">
+        <div> brand: @Model.Brand </div>
+        <div> Model: @Model.Model </div>
+        <div> Year: @Model.Year </div>
+        <div> GearBox: @Model.GearBox </div>
+        <div> Fuel: @Model.Fuel </div>
+        <div> Color: @Model.Color </div>
+        <div> Price: @Model.Price </div>
+        <div> Rent Date: @Model.RentDate </div>
+        <div> Delivery Date: @Model.DeliveryDate </div>
+        <div> Renting Price: @total TRY (KDV Dahil) </div>
+
+        <div>
+            <form method="post">
+                <button class="btn btn-success" type="submit">Received</button>
+            </form>
+        </div>
+    </div>
+
+    <div>
+    </div>
+</div>

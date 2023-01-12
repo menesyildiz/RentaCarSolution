@@ -1,0 +1,39 @@
+﻿@model EditBrandViewModel
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Edit Brand Information</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <form method="post">
+            <div class="mb-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="AgeLimit" class="form-label">Age Limit</label>
+                    <input asp-for="AgeLimit" class="form-control" />
+                    <span asp-validation-for="AgeLimit" class="text-danger small"></span>
+                </div class ="form-group mb-3">
+
+                <div class ="form-group mb-3">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success mb-2">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

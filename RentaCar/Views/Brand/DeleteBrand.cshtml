@@ -1,0 +1,22 @@
+﻿@model DeleteBrandViewModel
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Delete Brand Information</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <form method="post">
+            <div> Name : @Model.brand.Name</div>
+            <div> Age Limit : @Model.brand.AgeLimit</div>
+            <div> Desciption : @Model.brand.Description</div>
+            
+
+            <button class="btn btn-danger mb-3" type="submit">Delete</button>
+        </form>
+
+    </div>
+</div>

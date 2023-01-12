@@ -1,0 +1,40 @@
+﻿@model EditViewModel
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Edit Car Information</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <form method="post">
+            <div class="mb-3">
+                <label asp-for="Brand" class="form-label">Brand</label>
+                <input asp-for="Brand" class="form-control" placeholder="BMW, Mercedes, Jeep" />
+
+                <label asp-for="Model" class="form-label">Model</label>
+                <input asp-for="Model" class="form-control" placeholder="3.20i, 5.30d, S320 AMG, GrandCherooke" />
+
+                <label asp-for="Year" class="form-label">Year</label>
+                <input asp-for="Year" class="form-control" />
+
+                <label asp-for="GearBox" class="form-label">Gear Box</label>
+                <input asp-for="GearBox" class="form-control" />
+
+                <label asp-for="Fuel" class="form-label">Fuel</label>
+                <input asp-for="Fuel" class="form-control" />
+
+                <label asp-for="Color" class="form-label">Color</label>
+                <input asp-for="Color" class="form-control" />
+
+                <label asp-for="Price" class="form-label">Price</label>
+                <input type="text" asp-for="Price" class="form-control" />
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success mb-2">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

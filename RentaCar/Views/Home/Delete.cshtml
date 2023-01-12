@@ -1,0 +1,25 @@
+﻿@model DeleteViewModel
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Delete Car Information</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <form method="post">  
+            <div> Brand : @Model.car.Brand</div>
+            <div> Model : @Model.car.Model</div>
+            <div> Year : @Model.car.Year</div>
+            <div> GearBox : @Model.car.GearBox</div>
+            <div> Fuel : @Model.car.Fuel</div>
+            <div> Color : @Model.car.Color</div>
+            <div> Price : @Model.car.Price</div>
+
+            <button class="btn btn-danger mb-3" type="submit">Delete</button>
+        </form>
+
+    </div>
+</div>
