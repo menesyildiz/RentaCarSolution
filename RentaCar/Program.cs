@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using RentaCar.Entities;
+
 namespace RentaCar
 {
     public class Program
@@ -8,6 +12,11 @@ namespace RentaCar
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<DatabaseContext>(opts =>
+            {
+                opts.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; database=RentaCarDb; trusted_connection=true");
+            });
 
             var app = builder.Build();
 

@@ -1,17 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentaCar.Entities;
+using RentaCar.Managers;
 using RentaCar.Models;
 
 namespace RentaCar.Controllers
 {
     public class BrandController : Controller
     {
+        private BrandManager _brandManager;
+
+        public BrandController(DatabaseContext databaseContext)
+        {
+            _brandManager = new BrandManager(databaseContext);
+        }
+
+
         public IActionResult BrandList()
         {
-            List<Brand> brands = new List<Brand>();
-            DatabaseContext db = new DatabaseContext();
-            brands = db.Brands.ToList();
-
+            List<Brand> brands = _brandManager.List();
             return View(brands);
         }
 
@@ -23,13 +29,11 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult CreateBrand(NewBrandModel modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-
-            if (db.Brands.Any(x=>x.Name==modelim.Name))
+            if (_brandManager.IsNameExists(modelim.Name))
             {
                 ModelState.AddModelError("Name", "Daha önce tanımlanan marka");
             }
-            
+
             if (modelim.AgeLimit < 18)
             {
                 ModelState.AddModelError("AgeLimit", "18'den büyük yaş giriniz");
@@ -39,32 +43,21 @@ namespace RentaCar.Controllers
 
             if (ModelState.IsValid)
             {
-                
-                Brand brand = new Brand();
-                brand.Name = modelim.Name;
-                brand.AgeLimit = modelim.AgeLimit;
-                brand.Description = modelim.Description;
-
-
-                db.Brands.Add(brand);
-                db.SaveChanges();
+                _brandManager.Create(modelim);
 
                 return RedirectToAction("BrandList");
             }
             return View(modelim);
-           
+
         }
 
         public IActionResult EditBrand(int brandId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Brand brand = db.Brands.Find(brandId);
+            Brand brand = _brandManager.GetById(brandId);
             EditBrandViewModel edit = new EditBrandViewModel();
             edit.Name = brand.Name;
             edit.AgeLimit = brand.AgeLimit;
             edit.Description = brand.Description;
-            
-
 
             return View(edit);
         }
@@ -72,8 +65,7 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult EditBrand(int brandId, EditBrandViewModel modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Brand brand = db.Brands.Find(brandId);
+            Brand brand = _brandManager.GetById(brandId);
 
             if (modelim.AgeLimit < 18)
             {
@@ -82,37 +74,29 @@ namespace RentaCar.Controllers
 
             if (ModelState.IsValid)
             {
-                brand.Name = modelim.Name;
-                brand.AgeLimit = modelim.AgeLimit;
-                brand.Description = modelim.Description;
+                _brandManager.Update(brand, modelim);
 
-                db.SaveChanges();
                 return RedirectToAction("BrandList");
             }
+
             return View(modelim);
-
-
-
-
-
         }
 
         public IActionResult DeleteBrand(int brandId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Brand brand = db.Brands.Find(brandId);
+            Brand brand = _brandManager.GetById(brandId);
             DeleteBrandViewModel delete = new DeleteBrandViewModel();
             delete.brand = brand;
+
             return View(delete);
         }
 
         [HttpPost]
         public IActionResult DeleteBrand(int brandId, Brand modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Brand brand = db.Brands.Find(brandId);
-            db.Brands.Remove(brand);
-            db.SaveChanges();
+            Brand brand = _brandManager.GetById(brandId);
+            _brandManager.Delete(brand);
+
             return RedirectToAction("BrandList");
         }
 
