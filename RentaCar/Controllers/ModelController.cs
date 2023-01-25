@@ -3,25 +3,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using RentaCar.Entities;
+using RentaCar.Managers;
 using RentaCar.Models;
 
 namespace RentaCar.Controllers
 {
     public class ModelController : Controller
     {
+        private BrandManager _brandManager;
+        private ModelManager _modelManager;
         public IActionResult Index()
         {
-            
-            DatabaseContext db=new DatabaseContext();
-            List<Modelx> modelxes = db.Models.Include(x => x.Brand).ToList();
+
+            List<Modelx> modelxes = _modelManager.List();
 
             return View(modelxes);
         }
 
         public IActionResult CreateModelx()
         {
-            DatabaseContext db = new DatabaseContext();
-            List<Brand> brands = db.Brands.ToList();
+            List<Brand> brands = _brandManager.List();
+            List<Modelx> modelxes = _modelManager.List();
             SelectList list = new SelectList(brands, "Id", "Name");
             NewModelxViewModel modelx= new NewModelxViewModel();
             modelx.Brands = list;
@@ -32,22 +34,17 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult CreateModelx(NewModelxViewModel model)
         {
-            DatabaseContext db = new DatabaseContext();
+            
+            List<Modelx> modelxes = _modelManager.List();
 
             if (ModelState.IsValid)
             {
-                Modelx newModel = new Modelx();
-                newModel.Name = model.Name;
-                newModel.Details = model.Details;
-                newModel.BrandId= model.BrandId;
-
-                db.Models.Add(newModel);
-                db.SaveChanges();
+                _modelManager.Create(model);
 
                 return RedirectToAction("Index");
 
             }
-            List<Brand> brands = db.Brands.ToList();
+            List<Brand> brands = _brandManager.List();
             SelectList list = new SelectList(brands, "Id", "Name");
             model.Brands = list;
             return View(model);
@@ -55,9 +52,8 @@ namespace RentaCar.Controllers
 
         public IActionResult EditModel(int modelId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Modelx modelx = db.Models.Find(modelId);
-            List<Brand> brands = db.Brands.ToList();
+            Modelx modelx = _modelManager.GetById(modelId);
+            List<Brand> brands = _brandManager.List();
             SelectList list = new SelectList(brands, "Id", "Name");
 
             EditModelxViewModel edit = new EditModelxViewModel();
@@ -72,23 +68,15 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult EditModel(int modelId, EditModelxViewModel modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Modelx modelx = db.Models.Find(modelId);
-
-
+            Modelx modelx = _modelManager.GetById(modelId);
 
             if (ModelState.IsValid)
             {
-                modelx.Name = modelim.Name;
-                modelx.Details = modelim.Details;
-                modelx.BrandId= modelim.BrandId;
-                
-
-                db.SaveChanges();
+                _modelManager.Update(modelx, modelim);
 
                 return RedirectToAction("Index");
             }
-            List<Brand> brands = db.Brands.ToList();
+            List<Brand> brands = _brandManager.List();
             SelectList list = new SelectList(brands, "Id", "Name");
             modelim.Brands = list;
             return View(modelim);
@@ -97,10 +85,8 @@ namespace RentaCar.Controllers
 
         public IActionResult DeleteModel(int modelId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Modelx modelx = db.Models.Find(modelId);
-            db.Models.Remove(modelx);
-            db.SaveChanges();
+            Modelx modelx = _modelManager.GetById(modelId);
+            _modelManager.Delete(modelx);
             return RedirectToAction("Index");
         }
 

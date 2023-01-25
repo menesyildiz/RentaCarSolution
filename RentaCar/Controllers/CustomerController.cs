@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentaCar.Entities;
+using RentaCar.Managers;
 using RentaCar.Models;
 
 namespace RentaCar.Controllers
 {
     public class CustomerController:Controller
     {
+        private CustomerManager _customerManager;
         public IActionResult CustomerList()
         {
-            List<Customer> customers = new List<Customer>();
-            DatabaseContext db = new DatabaseContext();
-            customers = db.Customers.ToList();
-
+            List<Customer> customers = _customerManager.List();
             return View(customers);
         }
 
@@ -23,7 +22,7 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult CreateCustomer(NewCustomerModel modelim)
         {
-            DatabaseContext db = new DatabaseContext();
+            List<Customer> customers = _customerManager.List();
 
             //if (db.Brands.Any(x => x.Name == modelim.Name))
             //{
@@ -36,21 +35,12 @@ namespace RentaCar.Controllers
             //}
 
             //ModelState.AddModelError("", "bir hata oluştu"); genel hata verdirirsek.
-            Customer customer = new Customer();
-            
+
+
             if (ModelState.IsValid)
             {
 
-                customer.IdNumber = modelim.IdNumber;
-                customer.Name= modelim.Name;
-                customer.Surname= modelim.Surname;
-                customer.Birthday= modelim.Birthday;
-                customer.PhoneNumber= modelim.PhoneNumber;
-                customer.Email= modelim.Email;
-
-
-                db.Customers.Add(customer);
-                db.SaveChanges();
+                _customerManager.Create(modelim);
 
                 return RedirectToAction("CustomerList");
             }
@@ -62,9 +52,7 @@ namespace RentaCar.Controllers
 
         public IActionResult EditCustomer(int customerId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Customer customer=db.Customers.Find(customerId);
-            
+            Customer customer = _customerManager.GetById(customerId);
             EditCustomerViewModel edit = new EditCustomerViewModel();
            
             edit.IdNumber = customer.IdNumber;
@@ -81,21 +69,11 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult EditCustomer(int customerId, EditCustomerViewModel modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Customer customer = db.Customers.Find(customerId);
-
-            
+            Customer customer = _customerManager.GetById(customerId); 
 
             if (ModelState.IsValid)
             {
-                customer.IdNumber = modelim.IdNumber;
-                customer.Name = modelim.Name;
-                customer.Surname = modelim.Surname;
-                customer.Birthday = modelim.Birthday;
-                customer.PhoneNumber = modelim.PhoneNumber;
-                customer.Email = modelim.Email;
-
-                db.SaveChanges();
+                _customerManager.Update(customer, modelim);
 
                 return RedirectToAction("CustomerList");
             }
@@ -107,8 +85,7 @@ namespace RentaCar.Controllers
 
         public IActionResult DeleteCustomer(int customerId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Customer customer = db.Customers.Find(customerId);
+            Customer customer = _customerManager.GetById(customerId);
             DeleteCustomerViewModel delete = new DeleteCustomerViewModel();
             delete.customer = customer;
 
@@ -118,10 +95,8 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult DeleteCustomer(int customerId, Customer modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Customer customer = db.Customers.Find(customerId);
-            db.Customers.Remove(customer);
-            db.SaveChanges();
+            Customer customer = _customerManager.GetById(customerId);
+            _customerManager.Delete(customer);
             return RedirectToAction("CustomerList");
         }
 

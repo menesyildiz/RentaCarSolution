@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RentaCar.Entities;
+using RentaCar.Managers;
 using RentaCar.Models;
 using System.Diagnostics;
 
@@ -8,6 +9,8 @@ namespace RentaCar.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
+        private HomeManager _homeManager;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -47,8 +50,7 @@ namespace RentaCar.Controllers
 
         public IActionResult Rent(int carId)
         {
-            DatabaseContext db=new DatabaseContext();
-            Car car = db.Cars.Find(carId);
+            Car car = _homeManager.GetById(carId);
             RentViewModel rent = new RentViewModel();
             rent.Car = car;
 
@@ -57,8 +59,7 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult Rent(int carId, RentViewModel modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Car car =db.Cars.Find(carId);
+            Car car = _homeManager.GetById(carId);
             car.RentDate = DateTime.Now;
             car.DeliveryDate = modelim.DeliveryDate;
             car.Rented = true;
@@ -69,19 +70,14 @@ namespace RentaCar.Controllers
 
         public IActionResult Receive(int carId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Car car = db.Cars.Find(carId);
-            
-
-           
+            Car car = _homeManager.GetById(carId);
             return View(car);
         }
 
         [HttpPost]
         public IActionResult Receive(int carId, Car modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Car car = db.Cars.Find(carId);
+            Car car = _homeManager.GetById(carId);
             car.RentDate = null;
             car.DeliveryDate = null;
             car.Rented = false;
@@ -97,8 +93,7 @@ namespace RentaCar.Controllers
 
         public IActionResult Edit(int carId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Car car = db.Cars.Find(carId);
+            Car car = _homeManager.GetById(carId);
             EditViewModel edit = new EditViewModel();
             edit.Brand = car.Brand;
             edit.Model = car.Model;
@@ -115,24 +110,14 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult Edit(int carId, EditViewModel modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Car car = db.Cars.Find(carId);
-            car.Brand = modelim.Brand;
-            car.Model= modelim.Model;
-            car.Year= modelim.Year;
-            car.GearBox=modelim.GearBox;
-            car.Fuel= modelim.Fuel;
-            car.Color= modelim.Color;
-            car.Price= modelim.Price;
-
-            db.SaveChanges();
+            Car car = _homeManager.GetById(carId);
+            _homeManager.Update(car, modelim);
             return RedirectToAction("CarList");
         }
 
         public IActionResult Delete(int carId)
         {
-            DatabaseContext db = new DatabaseContext();
-            Car car = db.Cars.Find(carId);
+            Car car = _homeManager.GetById(carId);
             DeleteViewModel delete=new DeleteViewModel();
             delete.car = car;
             return View(delete);
@@ -141,28 +126,22 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult Delete(int carId, Car modelim)
         {
-            DatabaseContext db = new DatabaseContext();
-            Car car = db.Cars.Find(carId);
-            db.Cars.Remove(car);
-            db.SaveChanges();
+            Car car = _homeManager.GetById(carId);
+            _homeManager.Delete(car);
             return RedirectToAction("CarList");
         }
 
 
         public IActionResult CarList()
         {
-            List<Car> cars= new List<Car>();
-            DatabaseContext db = new DatabaseContext();
-            cars = db.Cars.ToList();
-
+            List<Car> cars = _homeManager.List();
             return View(cars);
         }
 
         [HttpPost]
         public IActionResult CarList(string order, string filter)
         {
-            List<Car> cars = new List<Car>();
-            DatabaseContext db = new DatabaseContext();
+            List<Car> cars = _homeManager.List();
 
             if (order=="IP")
             {   
