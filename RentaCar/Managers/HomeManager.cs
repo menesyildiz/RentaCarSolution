@@ -4,7 +4,19 @@ using System.Linq;
 
 namespace RentaCar.Managers
 {
-    public class HomeManager
+    public interface IHomeManager
+    {
+        void Create(NewCarModel modelim);
+        void Delete(Car car);
+        Car GetById(int carId);
+        List<Car> List();
+        List<Car> List(string order, string filter);
+        void ReceiveCar(Car car);
+        void RentACar(RentViewModel modelim, Car car);
+        void Update(Car car, EditViewModel modelim);
+    }
+
+    public class HomeManager : IHomeManager
     {
         private DatabaseContext _databaseContext;
 
@@ -12,7 +24,7 @@ namespace RentaCar.Managers
         {
             _databaseContext = databaseContext;
         }
-        
+
         public void Create(NewCarModel modelim)
         {
             Car car = new Car();

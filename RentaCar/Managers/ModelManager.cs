@@ -4,7 +4,16 @@ using RentaCar.Models;
 
 namespace RentaCar.Managers
 {
-    public class ModelManager
+    public interface IModelManager
+    {
+        void Create(NewModelxViewModel modelim);
+        void Delete(Modelx modelx);
+        Modelx GetById(int modelId);
+        List<Modelx> List();
+        void Update(Modelx modelx, EditModelxViewModel modelim);
+    }
+
+    public class ModelManager : IModelManager
     {
         private DatabaseContext _databaseContext;
 

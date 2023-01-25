@@ -3,7 +3,16 @@ using RentaCar.Models;
 
 namespace RentaCar.Managers
 {
-    public class CustomerManager
+    public interface ICustomerManager
+    {
+        void Create(NewCustomerModel modelim);
+        void Delete(Customer customer);
+        Customer GetById(int customerId);
+        List<Customer> List();
+        void Update(Customer customer, EditCustomerViewModel modelim);
+    }
+
+    public class CustomerManager : ICustomerManager
     {
         private DatabaseContext _databaseContext;
         public CustomerManager(DatabaseContext databaseContext)

@@ -3,7 +3,17 @@ using RentaCar.Models;
 
 namespace RentaCar.Managers
 {
-    public class BrandManager
+    public interface IBrandManager
+    {
+        List<Brand> List();
+        bool IsNameExists(string name);
+        void Create(NewBrandModel modelim);
+        Brand GetById(int brandId);
+        void Update(Brand brand, EditBrandViewModel modelim);
+        void Delete(Brand brand);
+    }
+
+    public class BrandManager : IBrandManager
     {
         private DatabaseContext _databaseContext;
 

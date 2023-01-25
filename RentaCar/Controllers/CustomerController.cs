@@ -7,11 +7,11 @@ namespace RentaCar.Controllers
 {
     public class CustomerController : Controller
     {
-        private CustomerManager _customerManager;
+        private ICustomerManager _customerManager;
 
-        public CustomerController(DatabaseContext databaseContext)
+        public CustomerController(ICustomerManager customerManager)
         {
-            _customerManager = new CustomerManager(databaseContext);
+            _customerManager = customerManager;
         }
         public IActionResult CustomerList()
         {

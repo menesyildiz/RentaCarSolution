@@ -8,11 +8,11 @@ namespace RentaCar.Controllers
 {
     public class HomeController : Controller
     {
-        private HomeManager _homeManager;
+        private IHomeManager _homeManager;
 
-        public HomeController(DatabaseContext databaseContext)
+        public HomeController(IHomeManager homeManager)
         {
-            _homeManager = new HomeManager(databaseContext);
+            _homeManager = homeManager;
         }
 
         public IActionResult Create()

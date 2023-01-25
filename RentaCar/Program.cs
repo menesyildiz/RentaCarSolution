@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RentaCar.Entities;
+using RentaCar.Managers;
 
 namespace RentaCar
 {
@@ -15,8 +16,13 @@ namespace RentaCar
 
             builder.Services.AddDbContext<DatabaseContext>(opts =>
             {
-                opts.UseSqlServer("Server=(localdb)\\MSSQLLocalDB; database=RentaCarDb; trusted_connection=true");
+                opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddScoped<IBrandManager, BrandManager>();
+            builder.Services.AddScoped<IModelManager, ModelManager>();
+            builder.Services.AddScoped<ICustomerManager, CustomerManager>();
+            builder.Services.AddScoped<IHomeManager, HomeManager>();
 
             var app = builder.Build();
 

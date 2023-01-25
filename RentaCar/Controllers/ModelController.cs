@@ -8,13 +8,13 @@ namespace RentaCar.Controllers
 {
     public class ModelController : Controller
     {
-        private BrandManager _brandManager;
-        private ModelManager _modelManager;
+        private IBrandManager _brandManager;
+        private IModelManager _modelManager;
 
-        public ModelController(DatabaseContext databaseContext)
+        public ModelController(IBrandManager brandManager, IModelManager modelManager)
         {
-            _brandManager = new BrandManager(databaseContext);
-            _modelManager = new ModelManager(databaseContext);       
+            _brandManager = brandManager;
+            _modelManager = modelManager;
         }
 
         public IActionResult Index()

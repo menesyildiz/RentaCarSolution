@@ -7,11 +7,11 @@ namespace RentaCar.Controllers
 {
     public class BrandController : Controller
     {
-        private BrandManager _brandManager;
+        private IBrandManager _brandManager;
 
-        public BrandController(DatabaseContext databaseContext)
+        public BrandController(IBrandManager brandManager)
         {
-            _brandManager = new BrandManager(databaseContext);
+            _brandManager = brandManager;
         }
 
 
