@@ -5,9 +5,14 @@ using RentaCar.Models;
 
 namespace RentaCar.Controllers
 {
-    public class CustomerController:Controller
+    public class CustomerController : Controller
     {
         private CustomerManager _customerManager;
+
+        public CustomerController(DatabaseContext databaseContext)
+        {
+            _customerManager = new CustomerManager(databaseContext);
+        }
         public IActionResult CustomerList()
         {
             List<Customer> customers = _customerManager.List();
@@ -44,7 +49,7 @@ namespace RentaCar.Controllers
 
                 return RedirectToAction("CustomerList");
             }
-            
+
 
             return View(modelim);
 
@@ -54,13 +59,13 @@ namespace RentaCar.Controllers
         {
             Customer customer = _customerManager.GetById(customerId);
             EditCustomerViewModel edit = new EditCustomerViewModel();
-           
+
             edit.IdNumber = customer.IdNumber;
-            edit.Name= customer.Name;
+            edit.Name = customer.Name;
             edit.Surname = customer.Surname;
-            edit.Birthday= customer.Birthday;
+            edit.Birthday = customer.Birthday;
             edit.PhoneNumber = customer.PhoneNumber;
-            edit.Email= customer.Email;
+            edit.Email = customer.Email;
 
 
             return View(edit);
@@ -69,7 +74,7 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult EditCustomer(int customerId, EditCustomerViewModel modelim)
         {
-            Customer customer = _customerManager.GetById(customerId); 
+            Customer customer = _customerManager.GetById(customerId);
 
             if (ModelState.IsValid)
             {
@@ -78,7 +83,7 @@ namespace RentaCar.Controllers
                 return RedirectToAction("CustomerList");
             }
             return View(modelim);
-            
+
         }
 
 

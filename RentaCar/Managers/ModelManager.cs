@@ -1,4 +1,5 @@
-﻿using RentaCar.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using RentaCar.Entities;
 using RentaCar.Models;
 
 namespace RentaCar.Managers
@@ -14,7 +15,7 @@ namespace RentaCar.Managers
 
         public List<Modelx> List()
         {
-            return _databaseContext.Models.ToList();
+            return _databaseContext.Models.Include(x => x.Brand).ToList();
         }
 
         public void Create(NewModelxViewModel modelim)

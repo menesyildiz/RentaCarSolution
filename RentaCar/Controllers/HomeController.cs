@@ -8,13 +8,11 @@ namespace RentaCar.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
         private HomeManager _homeManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(DatabaseContext databaseContext)
         {
-            _logger = logger;
+            _homeManager = new HomeManager(databaseContext);
         }
 
         public IActionResult Create()
@@ -25,24 +23,9 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult Create(NewCarModel modelim)
         {
-            DatabaseContext db= new DatabaseContext();
-
             if (ModelState.IsValid)
             {
-
-                Car car = new Car();
-                car.Brand = modelim.Brand;
-                car.Model = modelim.Model;
-                car.Year = modelim.Year;
-                car.GearBox = modelim.GearBox;
-                car.Fuel = modelim.Fuel;
-                car.Color = modelim.Color;
-                car.Price = modelim.Price;
-                car.Rented = false;
-
-                db.Cars.Add(car);
-                db.SaveChanges();
-
+                _homeManager.Create(modelim);
                 return RedirectToAction("CarList");
             }
             return View(modelim);
@@ -60,11 +43,7 @@ namespace RentaCar.Controllers
         public IActionResult Rent(int carId, RentViewModel modelim)
         {
             Car car = _homeManager.GetById(carId);
-            car.RentDate = DateTime.Now;
-            car.DeliveryDate = modelim.DeliveryDate;
-            car.Rented = true;
-
-            db.SaveChanges();
+            _homeManager.RentACar(modelim, car);
             return RedirectToAction("CarList");
         }
 
@@ -78,11 +57,7 @@ namespace RentaCar.Controllers
         public IActionResult Receive(int carId, Car modelim)
         {
             Car car = _homeManager.GetById(carId);
-            car.RentDate = null;
-            car.DeliveryDate = null;
-            car.Rented = false;
-
-            db.SaveChanges();
+            _homeManager.ReceiveCar(car);
             return RedirectToAction("CarList");
         }
 
@@ -97,12 +72,12 @@ namespace RentaCar.Controllers
             EditViewModel edit = new EditViewModel();
             edit.Brand = car.Brand;
             edit.Model = car.Model;
-            edit.Year= car.Year;
-            edit.GearBox= car.GearBox;
-            edit.Fuel= car.Fuel;
+            edit.Year = car.Year;
+            edit.GearBox = car.GearBox;
+            edit.Fuel = car.Fuel;
             edit.Color = car.Color;
-            edit.Price= car.Price;
-            
+            edit.Price = car.Price;
+
 
             return View(edit);
         }
@@ -112,14 +87,16 @@ namespace RentaCar.Controllers
         {
             Car car = _homeManager.GetById(carId);
             _homeManager.Update(car, modelim);
+
             return RedirectToAction("CarList");
         }
 
         public IActionResult Delete(int carId)
         {
             Car car = _homeManager.GetById(carId);
-            DeleteViewModel delete=new DeleteViewModel();
+            DeleteViewModel delete = new DeleteViewModel();
             delete.car = car;
+
             return View(delete);
         }
 
@@ -128,6 +105,7 @@ namespace RentaCar.Controllers
         {
             Car car = _homeManager.GetById(carId);
             _homeManager.Delete(car);
+
             return RedirectToAction("CarList");
         }
 
@@ -141,50 +119,9 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult CarList(string order, string filter)
         {
-            List<Car> cars = _homeManager.List();
-
-            if (order=="IP")
-            {   
-              cars = db.Cars.OrderBy(x=>x.Price).ToList();
-            }
-            else if(order=="DP")
-            {
-                cars = db.Cars.OrderByDescending(x => x.Price).ToList();
-            }
-            else if (order=="ASC")
-            {
-                cars = db.Cars.OrderBy(x => x.Brand).ToList();
-            }
-            else if(order=="DESC")
-            {
-                cars = db.Cars.OrderByDescending(x => x.Brand).ToList();
-            }
-            else if (filter == "Rented")
-            {
-                cars = db.Cars.Where(x=>x.Rented==true).ToList();
-            }
-            else if (filter == "NonRented")
-            {
-                cars = db.Cars.Where(x => x.Rented == false).ToList();
-            }
-            else if (filter == "GearBoxManu")
-            {
-                cars = db.Cars.Where(x => x.GearBox == "Manuel").ToList();
-            }
-            else if (filter == "GearBoxAuto")
-            {
-                cars = db.Cars.Where(x => x.GearBox == "Automatic").ToList();
-            }
-            else
-            {
-                cars = db.Cars.ToList();
-            }
-
-            
+            List<Car> cars = _homeManager.List(order, filter);
             return View(cars);
         }
-
-        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

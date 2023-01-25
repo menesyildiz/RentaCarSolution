@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using RentaCar.Entities;
 using RentaCar.Managers;
 using RentaCar.Models;
@@ -12,9 +10,15 @@ namespace RentaCar.Controllers
     {
         private BrandManager _brandManager;
         private ModelManager _modelManager;
+
+        public ModelController(DatabaseContext databaseContext)
+        {
+            _brandManager = new BrandManager(databaseContext);
+            _modelManager = new ModelManager(databaseContext);       
+        }
+
         public IActionResult Index()
         {
-
             List<Modelx> modelxes = _modelManager.List();
 
             return View(modelxes);
@@ -23,7 +27,7 @@ namespace RentaCar.Controllers
         public IActionResult CreateModelx()
         {
             List<Brand> brands = _brandManager.List();
-            List<Modelx> modelxes = _modelManager.List();
+
             SelectList list = new SelectList(brands, "Id", "Name");
             NewModelxViewModel modelx= new NewModelxViewModel();
             modelx.Brands = list;
@@ -34,8 +38,7 @@ namespace RentaCar.Controllers
         [HttpPost]
         public IActionResult CreateModelx(NewModelxViewModel model)
         {
-            
-            List<Modelx> modelxes = _modelManager.List();
+            //List<Modelx> modelxes = _modelManager.List();
 
             if (ModelState.IsValid)
             {
@@ -47,6 +50,7 @@ namespace RentaCar.Controllers
             List<Brand> brands = _brandManager.List();
             SelectList list = new SelectList(brands, "Id", "Name");
             model.Brands = list;
+
             return View(model);
         }
 
@@ -89,10 +93,5 @@ namespace RentaCar.Controllers
             _modelManager.Delete(modelx);
             return RedirectToAction("Index");
         }
-
-       //eretert
-
-
-
     }
 }
