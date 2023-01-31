@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RentaCar.Entities;
 using RentaCar.Managers;
 using RentaCar.Models;
 
 namespace RentaCar.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private ICustomerManager _customerManager;

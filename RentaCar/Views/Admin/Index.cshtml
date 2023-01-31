@@ -1,0 +1,50 @@
+﻿@using RentaCar.Entities;
+@model List<Member>
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Member List</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2 mb-3">
+        <a asp-action="Create" class="btn btn-primary">New Member</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col mb-3">
+        <table class="table table-bordered ">
+            <tr>
+                <td>Id</td>
+                <td>Username</td>
+                <td>Confirmed</td>
+                <td>Role</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            @foreach (Member member in Model)
+            {
+                <tr>
+                    <td>@member.Id</td>
+                    <td>@member.Username</td>
+                    <td>@member.Confirmed</td>
+                    <td>@member.Role</td>
+                    <td>
+                        <a asp-action="Confirm" asp-route-id="@member.Id" class="btn btn-warning btn-sm">Confirm</a>
+                    </td>
+                    <td>
+                        <a asp-action="MakeAdmin" asp-route-id="@member.Id" class="btn btn-info btn-sm">Make Admin</a>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@member.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

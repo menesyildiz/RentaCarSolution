@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RentaCar.Entities;
 using RentaCar.Managers;
 using RentaCar.Models;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 
 namespace RentaCar.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IHomeManager _homeManager;
@@ -15,11 +17,19 @@ namespace RentaCar.Controllers
             _homeManager = homeManager;
         }
 
+        [AllowAnonymous]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        //[Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
+        //[Authorize]
         [HttpPost]
         public IActionResult Create(NewCarModel modelim)
         {
@@ -31,6 +41,7 @@ namespace RentaCar.Controllers
             return View(modelim);
         }
 
+        //[Authorize]
         public IActionResult Rent(int carId)
         {
             Car car = _homeManager.GetById(carId);
@@ -39,6 +50,8 @@ namespace RentaCar.Controllers
 
             return View(rent);
         }
+
+        //[Authorize]
         [HttpPost]
         public IActionResult Rent(int carId, RentViewModel modelim)
         {
@@ -47,12 +60,14 @@ namespace RentaCar.Controllers
             return RedirectToAction("CarList");
         }
 
+        //[Authorize]
         public IActionResult Receive(int carId)
         {
             Car car = _homeManager.GetById(carId);
             return View(car);
         }
 
+        //[Authorize]
         [HttpPost]
         public IActionResult Receive(int carId, Car modelim)
         {
@@ -61,11 +76,13 @@ namespace RentaCar.Controllers
             return RedirectToAction("CarList");
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        //[Authorize]
         public IActionResult Edit(int carId)
         {
             Car car = _homeManager.GetById(carId);
@@ -82,6 +99,7 @@ namespace RentaCar.Controllers
             return View(edit);
         }
 
+        //[Authorize]
         [HttpPost]
         public IActionResult Edit(int carId, EditViewModel modelim)
         {
@@ -91,6 +109,7 @@ namespace RentaCar.Controllers
             return RedirectToAction("CarList");
         }
 
+        //[Authorize]
         public IActionResult Delete(int carId)
         {
             Car car = _homeManager.GetById(carId);
@@ -100,6 +119,7 @@ namespace RentaCar.Controllers
             return View(delete);
         }
 
+        //[Authorize]
         [HttpPost]
         public IActionResult Delete(int carId, Car modelim)
         {
@@ -109,13 +129,14 @@ namespace RentaCar.Controllers
             return RedirectToAction("CarList");
         }
 
-
+        //[Authorize]
         public IActionResult CarList()
         {
             List<Car> cars = _homeManager.List();
             return View(cars);
         }
 
+        //[Authorize]
         [HttpPost]
         public IActionResult CarList(string order, string filter)
         {
@@ -123,6 +144,7 @@ namespace RentaCar.Controllers
             return View(cars);
         }
 
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

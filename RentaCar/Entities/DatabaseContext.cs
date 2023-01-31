@@ -9,13 +9,9 @@ namespace RentaCar.Entities
         }
 
         public DbSet<Car> Cars { get; set; }
-
         public DbSet<Brand> Brands { get; set; }
-
         public DbSet<Customer> Customers { get; set; }
-
         public DbSet<Modelx> Models { get; set; }
-
-
+        public DbSet<Member> Members { get; set; }
     }
 }
