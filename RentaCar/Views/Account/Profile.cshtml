@@ -1,0 +1,55 @@
+﻿@using System.Security.Claims;
+
+<div class="row">
+    <div class="col">
+        <h1 class="display-4">Profile</h1>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-3">
+        <div class="text-center">
+            <img src="~/images/@User.FindFirst("image").Value" class="img-thumbnail rounded-circle" width="200" />
+        </div>
+        <div class="text-center">
+            <a class="btn btn-primary btn-sm mt-3" asp-action="ChangeProfileImage">Change Profile Image</a>
+        </div>
+    </div>
+    <div class="col-9">
+        <div>
+            <dl class="row pt-5">
+                <dt class="col-2"><i class="fa-solid fa-list me-2"></i>Name</dt>
+                <dd class="col-10">@User.FindFirst("name").Value</dd>
+                
+                <dt class="col-2"><i class="fa-solid fa-list me-2"></i>Surname</dt>
+                <dd class="col-10">@User.FindFirst("surname").Value</dd>
+
+                <dt class="col-2"><i class="fa-solid fa-user-tie me-2"></i>Username</dt>
+                <dd class="col-10">@User.FindFirst(ClaimTypes.Name).Value</dd>
+
+                <dt class="col-2"><i class="fa-solid fa-circle-info me-2"></i>Role</dt>
+                <dd class="col-10">@User.FindFirst(ClaimTypes.Role).Value</dd>
+
+                @{
+                    bool confirmed = bool.Parse(User.FindFirst("confirm").Value);
+                }
+
+                <dt class="col-2"><i class="fa-solid fa-person-circle-check me-2"></i>Confirm</dt>
+                <dd class="col-10">
+                    @if (confirmed == true)
+                    {
+                        <div class="text-success"><i class="fa-regular fa-circle-check me-2"></i>Approved</div>
+                    }
+                    else
+                    {
+                        <div class="text-danger"><i class="fa-regular fa-circle-xmark me-2"></i>Waiting</div>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <div class="text-start">
+            <a class="btn btn-primary btn-sm mt-3" asp-action="ChangeProfileInfo">Change Profile Info</a>
+        </div>
+    </div>
+</div>

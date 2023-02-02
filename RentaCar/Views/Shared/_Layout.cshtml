@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - @name</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RentaCar.styles.css" asp-append-version="true" />
 </head>
@@ -68,16 +69,42 @@
                     }
                     else
                     {
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">
+                        <ul class="navbar-nav ms-auto me-5">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-dark dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="~/images/@User.FindFirst("image").Value" 
+                                        class="img-thumbnail rounded-circle me-2" width="40" />
+
                                     @User.FindFirst(System.Security.Claims.ClaimTypes.Name).Value
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">
-                                    Çıkış
-                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Profile">
+                                            <i class="fa-solid fa-user-tie me-2"></i>
+                                            Show Profile
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeProfileInfo">
+                                            <i class="fa-solid fa-circle-info me-2"></i>
+                                            Change Profile Info
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="ChangeProfileImage">
+                                            <i class="fa-regular fa-image me-2"></i>
+                                            Change Profile Image
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">
+                                            <i class="fa-solid fa-right-from-bracket me-2"></i>
+                                            Çıkış
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     }
@@ -99,6 +126,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @*<partial name="_ValidationScriptsPartial"/>*@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/font-awesome/js/all.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

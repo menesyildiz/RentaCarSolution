@@ -8,6 +8,8 @@ namespace RentaCar.Managers
         bool CheckMember(LoginViewModel model);
         void RegisterMember(RegisterViewModel model);
         Member GetMember(string username);
+        Member UpdateMember(int userid, MemberUpdateViewModel model);
+        Member UpdateMemberPicture(int userid, string imageName);
     }
 
     public class AccountManager : IAccountManager
@@ -40,6 +42,25 @@ namespace RentaCar.Managers
         public Member GetMember(string username)
         {
             return _databaseContext.Members.Where(x => x.Username == username).FirstOrDefault();
+        }
+
+        public Member UpdateMember(int userid, MemberUpdateViewModel model)
+        {
+            Member member = _databaseContext.Members.Find(userid);
+            member.Name = model.Name;
+            member.Surname = model.Surname;
+
+            _databaseContext.SaveChanges();
+            return member;
+        }
+
+        public Member UpdateMemberPicture(int userid, string imageName)
+        {
+            Member member = _databaseContext.Members.Find(userid);
+            member.ImageFileName = imageName;
+
+            _databaseContext.SaveChanges();
+            return member;
         }
     }
 }

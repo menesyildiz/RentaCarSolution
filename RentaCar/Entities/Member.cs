@@ -17,5 +17,8 @@ namespace RentaCar.Entities
 
         public bool Confirmed { get; set; }
         public string Role { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string ImageFileName { get; set; } = "user-profile-icon.png";
     }
 }
