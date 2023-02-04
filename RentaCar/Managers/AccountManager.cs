@@ -26,6 +26,8 @@ namespace RentaCar.Managers
             Member member = new Member();
             member.Username = model.Username;
             member.Password = model.Password;
+            member.Name = "";
+            member.Surname = "";
             member.Confirmed = false;
             member.Role = "member";
 
